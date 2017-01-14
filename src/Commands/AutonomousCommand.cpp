@@ -24,12 +24,16 @@ AutonomousCommand::AutonomousCommand(): Command() {
 
 // Called just before this Command runs the first time
 void AutonomousCommand::Initialize() {
-
+	SetTimeout(5);
+	Robot::drive->ResetGyro();
+	Robot::drive->SetExp();
 }
 
 // Called repeatedly when this Command is scheduled to run
 void AutonomousCommand::Execute() {
-
+	SmartDashboard::PutNumber("Gyro Angle",Robot::drive->getGAngle());
+	static const float kP = .03;
+	Robot::drive->RobotDriveDrive(-1, -(Robot::drive->getGAngle() * kP));
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -39,7 +43,7 @@ bool AutonomousCommand::IsFinished() {
 
 // Called once after isFinished returns true
 void AutonomousCommand::End() {
-
+	Robot::drive->driveMethod(0,0);
 }
 
 // Called when another command which requires one or more of the same
