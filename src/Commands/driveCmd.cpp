@@ -30,7 +30,9 @@ void driveCmd::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void driveCmd::Execute() {
-	Robot::drive->driveMethod(Robot::oi->getleftJoy()->GetY(), Robot::oi->getrightJoy()->GetY());
+	if(Robot::teleop) {
+		Robot::drive->driveMethod(Robot::oi->getleftJoy()->GetY(), Robot::oi->getrightJoy()->GetY());
+	}
 }
 
 // Make this return true when this Command no longer needs to run execute()

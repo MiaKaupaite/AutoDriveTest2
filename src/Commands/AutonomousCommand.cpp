@@ -32,12 +32,18 @@ void AutonomousCommand::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void AutonomousCommand::Execute() {
 	SmartDashboard::PutNumber("Gyro Angle",Robot::drive->getGAngle());
-	static const float kP = .03;
-	Robot::drive->RobotDriveDrive(-1, -(Robot::drive->getGAngle() * kP));
+	static const float kP = .01;
+	//Robot::drive->driveMethod(-.3,-.3);
+
+	Robot::drive->RobotDriveDrive(.25, -(Robot::drive->getGAngle() * kP));
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool AutonomousCommand::IsFinished() {
+
+	//if (IsTimedOut()) {
+		//return true;
+	//}
     return false;
 }
 
