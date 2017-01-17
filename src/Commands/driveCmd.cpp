@@ -31,7 +31,7 @@ void driveCmd::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void driveCmd::Execute() {
 	if(Robot::teleop) {
-		Robot::drive->driveMethod(Robot::oi->getleftJoy()->GetY(), Robot::oi->getrightJoy()->GetY());
+		Robot::drive->driveMethod(.2, .2);
 	}
 }
 

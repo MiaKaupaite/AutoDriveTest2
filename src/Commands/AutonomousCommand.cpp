@@ -31,19 +31,22 @@ void AutonomousCommand::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void AutonomousCommand::Execute() {
-	SmartDashboard::PutNumber("Gyro Angle",Robot::drive->getGAngle());
-	static const float kP = .01;
-	//Robot::drive->driveMethod(-.3,-.3);
-
-	Robot::drive->RobotDriveDrive(.25, -(Robot::drive->getGAngle() * kP));
+	double speed = .3;
+	double difference = Robot::drive->getGAngle();
+	SmartDashboard::PutNumber("Left Motor Speed shoved left", -speed-(difference*0.01));
+	SmartDashboard::PutNumber("Right Motor Speed shoved left", speed+(difference*0.01));
+	SmartDashboard::PutNumber("Left Motor Speed shoved right", -speed+(difference*0.01));
+	SmartDashboard::PutNumber("Right Motor Speed shoved right", speed-(difference*0.01));
+	SmartDashboard::PutNumber("Gyro Position", Robot::drive->getGAngle());
+	Robot::drive->differenceMethod(speed, difference);
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool AutonomousCommand::IsFinished() {
 
-	//if (IsTimedOut()) {
-		//return true;
-	//}
+	if (IsTimedOut() || Robot::drive->CompareEncoders()) {
+		return true;
+	}
     return false;
 }
 

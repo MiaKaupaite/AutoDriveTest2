@@ -63,13 +63,60 @@ void Drive::ResetGyro() {
 }
 
 void Drive::SetExp() {
-	leftMotor1->SetExpiration(1);
-	leftMotor2->SetExpiration(1);
-	rightMotor1->SetExpiration(1);
-	rightMotor2->SetExpiration(1);
+	leftMotor1->SetExpiration(5000);
+	leftMotor1->SetSafetyEnabled(false);
+	leftMotor2->SetExpiration(5000);
+	leftMotor2->SetSafetyEnabled(false);
+	rightMotor1->SetExpiration(5000);
+	rightMotor1->SetSafetyEnabled(false);
+	rightMotor2->SetExpiration(5000);
+	rightMotor2->SetSafetyEnabled(false);
+	robotDrive41->SetExpiration(5000);
+	robotDrive41->SetSafetyEnabled(false);
 }
 
 void Drive::RobotDriveDrive(float magn, float curve) {
 	// robotDrive41->Drive(magn, curve);
 	robotDrive41->ArcadeDrive(magn,curve);
+}
+
+void Drive::ResetEncoders() {
+		Robot::drive->leftMotor2->SetEncPosition(0);
+		Robot::drive->rightMotor2->SetEncPosition(0);
+}
+
+bool Drive::CompareEncoders() {
+	if (Robot::drive->leftMotor2->GetEncPosition() >= 100000 && Robot::drive->rightMotor2->GetEncPosition() >= 100000) {
+		return true;
+	}
+	return false;
+}
+
+double Drive::getLeftEncPos() {
+	return Robot::drive->leftMotor2->GetEncPosition();
+}
+
+double Drive::getRightEncPos() {
+	return Robot::drive->rightMotor2->GetEncPosition();
+}
+
+void Drive::differenceMethod(double speed, double difference) {
+	if (Robot::drive->getGAngle() > 2) {
+		//veering right
+		Robot::drive->leftMotor1->Set(-(speed-(difference*0.01)));
+		Robot::drive->rightMotor1->Set(-(speed+(difference*0.01)));
+		Robot::drive->leftMotor2->Set(-(speed-(difference*0.01)));
+		Robot::drive->rightMotor2->Set(-(speed+(difference*0.01)));
+	} else if (Robot::drive->getGAngle() < -2) {
+		//veering left
+		Robot::drive->leftMotor1->Set(-(speed-(difference*0.01)));
+		Robot::drive->rightMotor1->Set(-(speed+(difference*0.01)));
+		Robot::drive->leftMotor2->Set(-(speed-(difference*0.01)));
+		Robot::drive->rightMotor2->Set(-(speed+(difference*0.01)));
+	} else {
+		Robot::drive->leftMotor1->Set(-speed);
+		Robot::drive->rightMotor1->Set(-speed);
+		Robot::drive->leftMotor2->Set(-speed);
+		Robot::drive->rightMotor2->Set(-speed);
+	}
 }
